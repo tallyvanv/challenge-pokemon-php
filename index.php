@@ -14,6 +14,19 @@ $pokemon_data = json_decode($json_data, JSON_OBJECT_AS_ARRAY);
 $species_json = file_get_contents($species_url);
 
 $species_data = json_decode($species_json, JSON_OBJECT_AS_ARRAY);
+
+function randomNumber($theLength) {
+    return rand(0, thelength);
+}
+
+$lengthArray = count($pokemon_data['moves']) - 1;
+
+print_r($lengthArray);
+
+/*if (isset($_GET['submit']))
+{
+    header('Location: challenge-pokemon-php.local');
+}*/
 ?>
 <!doctype html>
 <html lang="en">
