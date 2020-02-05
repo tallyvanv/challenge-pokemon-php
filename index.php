@@ -95,7 +95,7 @@ $species_data = json_decode($species_json, JSON_OBJECT_AS_ARRAY);
             <strong>Name:</strong>
             <span id="pokeName">
                 <?php
-                echo $pokemon_data['species']['name'];
+                echo ucfirst($pokemon_data['species']['name']);
                 ?>
             </span><br/>
             <strong>ID:</strong>
