@@ -15,18 +15,21 @@ $species_json = file_get_contents($species_url);
 
 $species_data = json_decode($species_json, JSON_OBJECT_AS_ARRAY);
 
-function randomNumber($theLength) {
-    return rand(0, thelength);
-}
-
 $lengthArray = count($pokemon_data['moves']) - 1;
 
-print_r($lengthArray);
+$moves = $pokemon_data['moves'];
 
-/*if (isset($_GET['submit']))
-{
-    header('Location: challenge-pokemon-php.local');
-}*/
+$movesArr = [];
+
+for ($i = 0; $i < $lengthArray; $i++) {
+        array_push($movesArr, $moves[$i]['move']['name']);
+        $randMoveIndex = array_rand($movesArr, 4);
+}
+
+$randomMove1 = $movesArr[$randMoveIndex[0]];
+$randomMove2 = $movesArr[$randMoveIndex[1]];
+$randomMove3 = $movesArr[$randMoveIndex[2]];
+$randomMove4 = $movesArr[$randMoveIndex[3]];
 ?>
 <!doctype html>
 <html lang="en">
@@ -119,10 +122,26 @@ print_r($lengthArray);
             </span><br/>
             <span id="evolutionsInfo"></span><br/>
             <ul id="moves">
-                <li id="move1"></li>
-                <li id="move2"></li>
-                <li id="move3"></li>
-                <li id="move4"></li>
+                <li id="move1">
+                    <?php
+                    echo $randomMove1;
+                    ?>
+                </li>
+                <li id="move2">
+                    <?php
+                    echo $randomMove2;
+                    ?>
+                </li>
+                <li id="move3">
+                    <?php
+                    echo $randomMove3;
+                    ?>
+                </li>
+                <li id="move4">
+                    <?php
+                    echo $randomMove4;
+                    ?>
+                </li>
             </ul>
         </div>
         <div id="blueButtons1">
