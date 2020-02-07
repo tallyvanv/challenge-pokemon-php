@@ -1,36 +1,54 @@
 <?php
+/*$pageRefreshed = isset($_SERVER['HTTP_CACHE_CONTROL']) &&($_SERVER['HTTP_CACHE_CONTROL'] === 'max-age=0' ||  $_SERVER['HTTP_CACHE_CONTROL'] == 'no-cache');
+if($pageRefreshed == 1){
+    header('location: index.php');
+}*/
 
+ini_set('display_errors', "1");
+ini_set('display_startup_errors', "1");
+error_reporting(E_ALL & ~E_NOTICE);
 
-$input = $_GET["pokemonToGet"];
+if(isset($_GET['pokemonToGet'])) {
+    $input = $_GET["pokemonToGet"];
 
-$api_url = 'https://pokeapi.co/api/v2/pokemon/'.strtolower($input);
+    $api_url = 'https://pokeapi.co/api/v2/pokemon/' . strtolower($input);
 
-$species_url = 'https://pokeapi.co/api/v2/pokemon-species/'.$input;
+    $json_data = file_get_contents($api_url);
 
-$json_data = file_get_contents($api_url);
+    $pokemon_data = json_decode($json_data, JSON_OBJECT_AS_ARRAY);
 
-$pokemon_data = json_decode($json_data, JSON_OBJECT_AS_ARRAY);
+    $moves = $pokemon_data['moves'];
+    shuffle($moves);
 
-$species_json = file_get_contents($species_url);
+    $movesArr = [];
 
-$species_data = json_decode($species_json, JSON_OBJECT_AS_ARRAY);
+    if (count($moves) >= 4) {
+        for ($i = 0; $i < 4; $i++) {
+            $movesArr[] = $moves[$i]['move']['name'];
+        }
+    } else {
+        for ($i = 0; $i < count($moves); $i++) {
+            $movesArr[] = $moves[$i]['move']['name'];
+        }
+    }
 
-$lengthArray = count($pokemon_data['moves']) - 1;
+    $input = $_GET["pokemonToGet"];
+    $species_url = 'https://pokeapi.co/api/v2/pokemon-species/' . strtolower($input);
+    $species_json = file_get_contents($species_url);
+    $species_data = json_decode($species_json, true);
 
-$moves = $pokemon_data['moves'];
+    $evoImage = "assets/whitesquare.jpeg";
+    $previous = "nothing";
 
-$movesArr = [];
-
-for ($i = 0; $i < $lengthArray; $i++) {
-        array_push($movesArr, $moves[$i]['move']['name']);
-        $randMoveIndex = array_rand($movesArr, 4);
+    if (is_array($species_data['evolves_from_species'])) {
+        $previous = $species_data['evolves_from_species']['name'];
+        $evoData = json_decode(file_get_contents('https://pokeapi.co/api/v2/pokemon/' . strtolower($previous)), true);
+        $evoImage = $evoData['sprites']['front_default'];
+    }
 }
 
-$randomMove1 = $movesArr[$randMoveIndex[0]];
-$randomMove2 = $movesArr[$randMoveIndex[1]];
-$randomMove3 = $movesArr[$randMoveIndex[2]];
-$randomMove4 = $movesArr[$randMoveIndex[3]];
 ?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -42,10 +60,6 @@ $randomMove4 = $movesArr[$randMoveIndex[3]];
     <title>Pokedex</title>
 </head>
 <body>
-<form method="get">
-    <input type="text" name="pokemonToGet"/>
-    <input type="submit">
-</form>
 <div id="pokedex">
     <div id="left">
         <div id="logo"></div>
@@ -53,7 +67,7 @@ $randomMove4 = $movesArr[$randMoveIndex[3]];
         <div id="bg_curve2_left"></div>
         <div id="curve1_left">
             <div id="buttonGlass">
-                <div id="reflect"> </div>
+                <div id="reflect"></div>
             </div>
             <div id="miniButtonGlass1"></div>
             <div id="miniButtonGlass2"></div>
@@ -73,8 +87,11 @@ $randomMove4 = $movesArr[$randMoveIndex[3]];
             <!--            Where our sprites and evolved from will go-->
             <div id="picture">
                 <img src="<?php
+                echo $evoImage;
+                ?>" id="evoPic"/>
+                <img src="<?php
                 echo $pokemon_data['sprites']['front_default'];
-                ?>"/>
+                ?>" id="mainPic"/>
             </div>
             <div id="buttonbottomPicture"></div>
             <div id="speakers">
@@ -120,28 +137,14 @@ $randomMove4 = $movesArr[$randMoveIndex[3]];
                 echo $pokemon_data['id'];
                 ?>
             </span><br/>
-            <span id="evolutionsInfo"></span><br/>
+            <span id="evolutionsInfo">
+                Evolves from <?php echo $previous ?>
+                </span><br/>
             <ul id="moves">
-                <li id="move1">
-                    <?php
-                    echo $randomMove1;
-                    ?>
-                </li>
-                <li id="move2">
-                    <?php
-                    echo $randomMove2;
-                    ?>
-                </li>
-                <li id="move3">
-                    <?php
-                    echo $randomMove3;
-                    ?>
-                </li>
-                <li id="move4">
-                    <?php
-                    echo $randomMove4;
-                    ?>
-                </li>
+                <?php foreach ($movesArr as $move) {
+                    echo '<li>' . $move . '</li>';
+                } ?>
+
             </ul>
         </div>
         <div id="blueButtons1">
@@ -162,8 +165,10 @@ $randomMove4 = $movesArr[$randMoveIndex[3]];
         <div id="miniButtonGlass5"></div>
         <div id="barbutton3"></div>
         <div id="barbutton4"></div>
-        <div id="yellowBox1"></div>
-        <div id="yellowBox2"></div>
+        <form method="get">
+            <div id="yellowBox1"><input id="inputPokemon" type="text" name="pokemonToGet" placeholder="type here"/></div>
+            <div id="yellowBox2"><input id="getPokemon" type="submit" value="Get Pokemon"></div>
+        </form>
         <div id="bg_curve1_right"></div>
         <div id="bg_curve2_right"></div>
         <div id="curve1_right"></div>

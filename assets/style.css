@@ -3,14 +3,21 @@
     padding: 0;
 }
 
-#searchBar {
+/*#searchBar {
     display: flex;
     justify-content: center;
     padding: 20px;
-}
+}*/
 
 @media all {
 
+    #evoPic {
+        width: 30%;
+    }
+
+    #mainPic {
+        width: 90%;
+    }
     #moves {
         list-style-type: none;
     }
@@ -918,6 +925,9 @@
         top: 415px;
         left: 25px;
 
+        display: flex;
+        justify-content: center;
+
         border-radius: 15px;
         -webkit-border-radius: 15px;
         -moz-border-radius: 15px;
@@ -929,6 +939,22 @@
         -o-box-shadow: 0 0 20px #ff6600 inset;
     }
 
+    #inputPokemon {
+        margin: auto;
+        width: 140px;
+        border: none;
+        background-color: transparent;
+        text-align: center;
+    }
+
+    #getPokemon {
+        margin: auto;
+        border: none;
+        background-color: transparent;
+        height: 50px;
+    }
+
+
     div#yellowBox2
     {
         width: 140px;
@@ -939,6 +965,9 @@
         position: absolute;
         top: 415px;
         left: 185px;
+
+        display: flex;
+        justify-content: center;
 
         border-radius: 15px;
         -webkit-border-radius: 15px;
