@@ -141,9 +141,11 @@ if(isset($_GET['pokemonToGet'])) {
                 Evolves from <?php echo $previous ?>
                 </span><br/>
             <ul id="moves">
-                <?php foreach ($movesArr as $move) {
+                <?php
+                if(isset($_GET['pokemonToGet'])) {
+                foreach ($movesArr as $move) {
                     echo '<li>' . $move . '</li>';
-                } ?>
+                }} ?>
 
             </ul>
         </div>
